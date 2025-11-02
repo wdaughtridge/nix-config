@@ -109,5 +109,17 @@
     VISUAL = "nvim";
   };
 
+  programs.git = {
+    enable = true;
+    aliases = {
+      ci = "commit";
+      co = "checkout";
+      st = "status";
+    };
+    userName = "wdaughtridge";
+    userEmail = "wdaughtridge@gmail.com";
+    extraConfig = {};
+  };
+
   programs.home-manager.enable = true;
 }
