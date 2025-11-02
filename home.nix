@@ -31,6 +31,11 @@
     viAlias = true;
     vimAlias = true;
 
+    globals = {
+      mapleader = " ";
+      localleader = " ";
+    };
+
     opts = {
       winborder = "double";
       signcolumn = "yes:1";
@@ -51,7 +56,7 @@
         enable = true;
         keymaps = {
           "<leader>f" = "git_files";
-          "<leader>a" = "files";
+          "<leader>a" = "find_files";
           "<leader>/" = "live_grep";
         };
       };
@@ -111,14 +116,17 @@
 
   programs.git = {
     enable = true;
-    aliases = {
-      ci = "commit";
-      co = "checkout";
-      st = "status";
+    settings = {
+      alias = {
+        ci = "commit";
+        co = "checkout";
+        st = "status";
+      };
+      user = {
+        name = "wdaughtridge";
+        email = "wdaughtridge@gmail.com";
+      };
     };
-    userName = "wdaughtridge";
-    userEmail = "wdaughtridge@gmail.com";
-    extraConfig = {};
   };
 
   programs.home-manager.enable = true;
