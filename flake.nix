@@ -1,12 +1,9 @@
 {
-  description = "A sample NixOS-on-Lima configuration flake";
+  description = "Home Manager configuration of wdaughtridge";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-lima = {
-      url = "github:nixos-lima/nixos-lima/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Specify the source of Home Manager and Nixpkgs.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,29 +14,21 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-lima, home-manager, nixvim, ... }@inputs:
+  outputs =
+    { nixpkgs, home-manager, nixvim, ... }@inputs:
     let
-      system = "aarch64-linux";
+      system = "aarch64-darwin";
       pkgs = nixpkgs.legacyPackages.${system};
-    in {
-        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = { inherit nixos-lima; };
-          modules = [
-            ./nixos-lima-config.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.wdaughtridge = ./home.nix;
-              users.users.wdaughtridge.isSystemUser = true;
-              users.users.wdaughtridge.group = "users";
-              users.users.wdaughtridge.home = "/home/wdaughtridge.linux";
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-              };
-            }
-          ];
+    in
+    {
+      homeConfigurations."wdaughtridge" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+
+        modules = [ ./home.nix ];
+
+        extraSpecialArgs = {
+          inherit inputs;
         };
-    };    
+      };
+    };
 }
