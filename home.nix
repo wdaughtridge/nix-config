@@ -11,20 +11,29 @@
   home.packages = [
     pkgs.nil
     pkgs.bat
+    pkgs.lazygit
     pkgs.curl
     pkgs.fzf
     pkgs.ripgrep
     pkgs.git
     pkgs.gh
     pkgs.tree-sitter
+    pkgs.oh-my-posh
+    pkgs.rustup
+    pkgs.deno
   ];
 
   programs.bash = {
     enable = true;
     enableCompletion = true;
+    profileExtra = ''
+      eval "$(oh-my-posh init bash --config darkblood)"
+    '';
+    shellAliases = {
+      "ll" = "ls -la";
+      "lg" = "lazygit";
+    };
   };
-
-  programs.lazygit.enable = true;
 
   programs.nixvim = {
     enable = true;
@@ -51,6 +60,7 @@
       fugitive.enable = true;
       web-devicons.enable = true;
       transparent.enable = true;
+      toggleterm.enable = true;
 
       telescope = {
         enable = true;
@@ -87,6 +97,7 @@
       servers = {
         nil_ls.enable = true;
         rust_analyzer.enable = true;
+        deno_ls.enable = true;
       };
     };
 
