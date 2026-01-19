@@ -2,23 +2,25 @@
   description = "Home Manager configuration of wdaughtridge";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-2.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixvim = {
-      url = "github:nix-community/nixvim";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs =
-    { nixpkgs, home-manager, nixvim, ... }@inputs:
+    {
+      nixpkgs,
+      nixpkgs-2,
+      home-manager,
+      ...
+    }@inputs:
     let
       system = "aarch64-darwin";
       pkgs = nixpkgs.legacyPackages.${system};
+      pkgs-2 = nixpkgs-2.legacyPackages.${system};
     in
     {
       homeConfigurations."wdaughtridge" = home-manager.lib.homeManagerConfiguration {
@@ -28,6 +30,7 @@
 
         extraSpecialArgs = {
           inherit inputs;
+          inherit pkgs-2;
         };
       };
     };
