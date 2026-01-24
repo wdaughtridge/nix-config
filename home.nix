@@ -11,9 +11,13 @@
   home.stateVersion = "25.05";
 
   home.packages = [
+    pkgs.babashka
     pkgs.bat
     pkgs.btop
 
+    pkgs.clj-kondo
+    pkgs.clojure
+    pkgs.clojure-lsp
     pkgs.cmake
     pkgs.curl
 
@@ -61,6 +65,22 @@
     pkgs.zls
   ];
 
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs;
+    extraPackages = epkgs: [
+      epkgs.nix-mode
+      epkgs.nixfmt
+      epkgs.magit
+      epkgs.haskell-mode
+      epkgs.projectile
+    ];
+    extraConfig = ''
+      (setq standard-indent 2)
+      (tool-bar-mode -1)
+    '';
+  };
+
   programs.helix = {
     enable = true;
     settings = {
@@ -71,41 +91,6 @@
     };
   };
 
-  programs.vim = {
-    enable = true;
-    plugins =
-      (with pkgs.vimPlugins; [
-        vim-sleuth
-        ale
-        fzf-vim
-        onedark-vim
-      ])
-      ++ (with pkgs-2.vimPlugins; [
-        zig-vim
-      ]);
-    extraConfig = ''
-      colorscheme onedark
-      set nowrap
-      set backspace=indent,eol,start
-      set wildmenu
-      set wildmode=longest:full,full
-      set ignorecase
-      set smartcase
-      set showcmd
-      set signcolumn=yes
-      set laststatus=2
-      set ttyfast
-      let mapleader = " "
-      command! Terminal :terminal bash -l
-      command! HomeManager :!home-manager switch
-      nnoremap <leader>f <cmd>Files<cr>
-    '';
-    settings = {
-      relativenumber = true;
-      number = true;
-    };
-  };
-
   programs.kitty = {
     enable = true;
     shellIntegration.enableBashIntegration = true;
@@ -113,40 +98,13 @@
       "cmd+\\" = "launch --cwd=current";
       "cmd+enter" = "launch --cwd=current";
     };
+    themeFile = "flexoki_light";
     settings = {
       font_family = "JetBrainsMono Nerd Font Mono";
       font_size = 15;
       shell = "/Users/wdaughtridge/.nix-profile/bin/bash --login";
       editor = "hx";
       macos_option_as_alt = true;
-      foreground = "#100F0F";
-      background = "#FFFCF0";
-      selection_foreground = "#100F0F";
-      selection_background = "#CECDC3";
-      cursor = "#100F0F";
-      cursor_text_color = "#FFFCF0";
-      active_border_color = "#D14D41";
-      inactive_border_color = "#CECDC3";
-      active_tab_foreground = "#100F0F";
-      active_tab_background = "#CECDC3";
-      inactive_tab_foreground = "#6F6E69";
-      inactive_tab_background = "#E6E4D9";
-      color0 = "#100F0F";
-      color8 = "#6F6E69";
-      color1 = "#D14D41";
-      color9 = "#AF3029";
-      color2 = "#879A39";
-      color10 = "#66800B";
-      color3 = "#D0A215";
-      color11 = "#AD8301";
-      color4 = "#4385BE";
-      color12 = "#205EA6";
-      color5 = "#CE5D97";
-      color13 = "#A02F6F";
-      color6 = "#3AA99F";
-      color14 = "#24837B";
-      color7 = "#FFFCF0";
-      color15 = "#F2F0E5";
     };
   };
 
@@ -157,11 +115,13 @@
       eval "$(direnv hook bash)"
       PS1='-[\[\e[38;5;73m\]\u\[\e[0m\]:\[\e[38;5;75m\]\w\[\e[0m\]]-[\[\e[38;5;215m\]\t\[\e[0m\]]\n\\$ '
       unset DEVELOPER_DIR
+      source /Users/wdaughtridge/.ghcup/env
       export PATH=$HOME/.nix-profile/bin:$HOME/.local/bin:$PATH
     '';
     shellAliases = {
       "ll" = "ls -la";
       "lg" = "lazygit";
+      "haskell-language-server" = "hls";
     };
   };
 
