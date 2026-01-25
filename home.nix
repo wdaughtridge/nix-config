@@ -33,6 +33,7 @@
     pkgs-2.gleam
     pkgs.go
     pkgs.gopls
+    pkgs.gum
 
     pkgs.jdk25
 
@@ -41,6 +42,7 @@
     pkgs.lazygit
 
     pkgs.maven
+    pkgs.minikube
 
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.nerd-fonts.open-dyslexic
@@ -69,15 +71,18 @@
     enable = true;
     package = pkgs.emacs;
     extraPackages = epkgs: [
+      epkgs.clojure-mode
+      epkgs.evil
+      epkgs.haskell-mode
+      epkgs.magit
       epkgs.nix-mode
       epkgs.nixfmt
-      epkgs.magit
-      epkgs.haskell-mode
       epkgs.projectile
     ];
     extraConfig = ''
       (setq standard-indent 2)
       (tool-bar-mode -1)
+      (setq ring-bell-function 'ignore)
     '';
   };
 
