@@ -1,10 +1,19 @@
 {
   pkgs,
   pkgs-2,
+  helix,
+  zig,
   ...
 }:
 
 {
+  nixpkgs = {
+    overlays = [
+      helix.overlays.default
+      zig.overlays.default
+    ] ;   
+  };
+
   home.username = "wdaughtridge";
   home.homeDirectory = "/Users/wdaughtridge";
 
@@ -63,33 +72,15 @@
 
     pkgs.wget
 
-    pkgs.zig
+    pkgs.zigpkgs.master
     pkgs.zls
   ];
-
-  programs.emacs = {
-    enable = true;
-    package = pkgs.emacs;
-    extraPackages = epkgs: [
-      epkgs.clojure-mode
-      epkgs.evil
-      epkgs.haskell-mode
-      epkgs.magit
-      epkgs.nix-mode
-      epkgs.nixfmt
-      epkgs.projectile
-    ];
-    extraConfig = ''
-      (setq standard-indent 2)
-      (tool-bar-mode -1)
-      (setq ring-bell-function 'ignore)
-    '';
-  };
 
   programs.helix = {
     enable = true;
     settings = {
-      theme = "flexoki_light";
+      # theme = "flexoki_light";
+      theme = "wolf-alabaster-dark";
       editor = {
         popup-border = "all";
       };
@@ -103,7 +94,8 @@
       "cmd+\\" = "launch --cwd=current";
       "cmd+enter" = "launch --cwd=current";
     };
-    themeFile = "flexoki_light";
+    # themeFile = "flexoki_light";
+    themeFile = "alabaster_dark";
     settings = {
       font_family = "JetBrainsMono Nerd Font Mono";
       font_size = 15;
@@ -121,7 +113,8 @@
       PS1='-[\[\e[38;5;73m\]\u\[\e[0m\]:\[\e[38;5;75m\]\w\[\e[0m\]]-[\[\e[38;5;215m\]\t\[\e[0m\]]\n\\$ '
       unset DEVELOPER_DIR
       source /Users/wdaughtridge/.ghcup/env
-      export PATH=$HOME/.nix-profile/bin:$HOME/.local/bin:$PATH
+      export PATH=$HOME/.nix-profile/bin:$HOME/.juliaup/bin:$HOME/.local/bin:$PATH
+      eval $(opam env)
     '';
     shellAliases = {
       "ll" = "ls -la";

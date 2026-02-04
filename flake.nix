@@ -8,6 +8,8 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    helix.url = "github:helix-editor/helix";
+    zig.url = "github:mitchellh/zig-overlay";
   };
 
   outputs =
@@ -15,6 +17,8 @@
       nixpkgs,
       nixpkgs-2,
       home-manager,
+      helix,
+      zig,
       ...
     }@inputs:
     let
@@ -31,6 +35,8 @@
         extraSpecialArgs = {
           inherit inputs;
           inherit pkgs-2;
+          inherit helix;
+          inherit zig;
         };
       };
     };
